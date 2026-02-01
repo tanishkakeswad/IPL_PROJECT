@@ -1,39 +1,64 @@
 package com.edutech.progressive.service.impl;
 
 import com.edutech.progressive.entity.User;
+import com.edutech.progressive.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class UserLoginServiceImpl implements UserDetailsService {
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired(required = false)
+    private PasswordEncoder passwordEncoder;
+
     public List<User> getAllUsers() {
-        return null;
+        return userRepository.findAll();
     }
 
     public Optional<User> getUserById(Integer userId) {
-        return null;
+        return userRepository.findById(userId);
     }
 
     public User createUser(User user) {
-        return null;
+        if (passwordEncoder != null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        return userRepository.save(user);
     }
 
     public User updateUser(User user) {
-        return null;
+        return userRepository.save(user);
     }
 
     public void deleteUser(Integer id) {
+        userRepository.deleteById(id);
     }
 
     public User getUserByUsername(String username) {
-        return null;
+        return userRepository.findByUsername(username);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        return null;
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
+                Collections.singletonList(new SimpleGrantedAuthority(user.getRole())));
     }
 }

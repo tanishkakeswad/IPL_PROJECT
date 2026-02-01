@@ -1,24 +1,33 @@
 package com.edutech.progressive.controller;
 
 import com.edutech.progressive.entity.Vote;
+import com.edutech.progressive.service.impl.VoteServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+@RestController
+@RequestMapping("/vote")
 public class VoteController {
 
+    @Autowired
+    private VoteServiceImpl voteService;
+
+    @GetMapping
     public ResponseEntity<List<Vote>> getAllVotes() {
-        return null;
+        return ResponseEntity.ok(voteService.getAllVotes());
     }
 
-    public ResponseEntity<Integer> createVote(Vote vote) {
-        return null;
+    @PostMapping
+    public ResponseEntity<Integer> createVote(@RequestBody Vote vote) {
+        int id = voteService.createVote(vote);
+        return ResponseEntity.status(201).body(id);
     }
 
-    // Each key (k) represents a category (categories - “Team”, “Batsman”, “Bowler”, “All-rounder” and “Wicketkeeper”)
-    // and each value (v) represents the total number of votes for that category.
+    @GetMapping("/count")
     public ResponseEntity<Map<String, Long>> getVotesCountOfAllCategories() {
-        return null;
+        return ResponseEntity.ok(voteService.getVotesCountOfAllCategories());
     }
 }

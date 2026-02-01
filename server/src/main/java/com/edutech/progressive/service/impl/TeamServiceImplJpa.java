@@ -7,6 +7,7 @@ import com.edutech.progressive.repository.CricketerRepository;
 import com.edutech.progressive.repository.MatchRepository;
 import com.edutech.progressive.repository.TeamRepository;
 import com.edutech.progressive.repository.VoteRepository;
+import com.edutech.progressive.repository.TicketBookingRepository;
 import com.edutech.progressive.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,8 @@ public class TeamServiceImplJpa implements TeamService {
     private MatchRepository matchRepository;
     @Autowired(required = false)
     private VoteRepository voteRepository;
+    @Autowired(required = false)
+    private TicketBookingRepository ticketBookingRepository;
 
     public TeamServiceImplJpa() {
     }
@@ -75,6 +78,9 @@ public class TeamServiceImplJpa implements TeamService {
 
     @Override
     public void deleteTeam(int teamId) throws SQLException {
+        if (ticketBookingRepository != null) {
+            ticketBookingRepository.deleteByTeamId(teamId);
+        }
         if (matchRepository != null) {
             matchRepository.deleteByTeamId(teamId);
         }
