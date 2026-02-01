@@ -5,10 +5,11 @@ import java.util.Date;
 import java.util.Objects;
 
 import javax.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "matches")
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Match {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +19,6 @@ public class Match {
     @Column(name = "first_team_id")
     private int firstTeamId;
 
-    @JsonIgnore
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "first_team_id", referencedColumnName = "team_id", insertable = false, updatable = false)
     private Team firstTeam;
@@ -26,7 +26,6 @@ public class Match {
     @Column(name = "second_team_id")
     private int secondTeamId;
 
-    @JsonIgnore
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "second_team_id", referencedColumnName = "team_id", insertable = false, updatable = false)
     private Team secondTeam;
@@ -47,7 +46,6 @@ public class Match {
     @Column(name = "winner_team_id")
     private int winnerTeamId;
 
-    @JsonIgnore
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "winner_team_id", referencedColumnName = "team_id", insertable = false, updatable = false)
     private Team winnerTeam;

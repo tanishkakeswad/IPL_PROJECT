@@ -25,7 +25,11 @@ public class MatchServiceImplJdbc implements MatchService {
 
     @Override
     public Integer addMatch(Match match) throws SQLException {
-        return matchDAO.addMatch(match);
+        int id = matchDAO.addMatch(match);
+        if (id > 0) {
+            match.setMatchId(id);
+        }
+        return id;
     }
 
     @Override

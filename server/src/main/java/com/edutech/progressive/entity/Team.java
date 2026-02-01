@@ -4,9 +4,11 @@ import javax.persistence.*;
 import java.util.Objects;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "team")
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Team implements Comparable<Team> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

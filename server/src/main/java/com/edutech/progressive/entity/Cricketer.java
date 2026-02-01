@@ -2,10 +2,11 @@ package com.edutech.progressive.entity;
 
 import javax.persistence.*;
 import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "cricketer")
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Cricketer implements Comparable<Cricketer> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +16,6 @@ public class Cricketer implements Comparable<Cricketer> {
     @Column(name = "team_id")
     private int teamId;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "team_id", referencedColumnName = "team_id", insertable = false, updatable = false)
     private Team team;
