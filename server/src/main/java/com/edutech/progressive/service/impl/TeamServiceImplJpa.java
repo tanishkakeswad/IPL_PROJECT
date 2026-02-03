@@ -15,6 +15,8 @@ import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 @Service
 public class TeamServiceImplJpa implements TeamService {
 
@@ -75,7 +77,7 @@ public class TeamServiceImplJpa implements TeamService {
         }
         teamRepository.save(team);
     }
-
+    @Transactional
     @Override
     public void deleteTeam(int teamId) throws SQLException {
         if (ticketBookingRepository != null) {
@@ -91,5 +93,10 @@ public class TeamServiceImplJpa implements TeamService {
             voteRepository.deleteByTeamId(teamId);
         }
         teamRepository.deleteById(teamId);
+        // ticketBookingRepository.deleteByTeamId(teamId);
+        // matchRepository.deleteByTeamId(teamId);
+        // cricketerRepository.deleteByTeamId(teamId);
+        // voteRepository.deleteByTeamId(teamId);
+        // teamRepository.deleteById(teamId);
     }
 }
