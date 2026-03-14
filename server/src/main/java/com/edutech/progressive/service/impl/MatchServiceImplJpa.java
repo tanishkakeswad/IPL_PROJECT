@@ -1,29 +1,24 @@
 package com.edutech.progressive.service.impl;
 
 import com.edutech.progressive.entity.Match;
-import com.edutech.progressive.entity.Team;
 import com.edutech.progressive.exception.NoMatchesFoundException;
 import com.edutech.progressive.repository.MatchRepository;
-import com.edutech.progressive.repository.TicketBookingRepository;
 import com.edutech.progressive.service.MatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MatchServiceImplJpa implements MatchService {
 
-    @Autowired
+    
     private MatchRepository matchRepository;
-    @Autowired(required = false)
-    private TicketBookingRepository ticketBookingRepository;
 
-    public MatchServiceImplJpa() {
-    }
-
-    public MatchServiceImplJpa(MatchRepository matchRepository) {
-        this.matchRepository = matchRepository;
+    @Autowired
+     public MatchServiceImplJpa(MatchRepository matchRepository ) {
+        this.matchRepository=matchRepository;
     }
 
     @Override
@@ -33,64 +28,38 @@ public class MatchServiceImplJpa implements MatchService {
 
     @Override
     public Match getMatchById(int matchId) throws SQLException {
-        return matchRepository.findByMatchId(matchId);
+        return matchRepository.findById(matchId).orElse(null);
     }
 
     @Override
     public Integer addMatch(Match match) throws SQLException {
-        if (match.getFirstTeamId() == 0) {
-            Team t = match.getFirstTeam();
-            if (t != null)
-                match.setFirstTeamId(t.getTeamId());
-        }
-        if (match.getSecondTeamId() == 0) {
-            Team t = match.getSecondTeam();
-            if (t != null)
-                match.setSecondTeamId(t.getTeamId());
-        }
-        if (match.getWinnerTeamId() == 0) {
-            Team t = match.getWinnerTeam();
-            if (t != null)
-                match.setWinnerTeamId(t.getTeamId());
-        }
-        Match saved = matchRepository.save(match);
-        return saved.getMatchId();
+        Match savedMatch = matchRepository.save(match);
+        return savedMatch.getMatchId();
     }
 
+    // Fixes Test 51: Successfully modifies match status
     @Override
     public void updateMatch(Match match) throws SQLException {
-        if (match.getFirstTeamId() == 0) {
-            Team t = match.getFirstTeam();
-            if (t != null)
-                match.setFirstTeamId(t.getTeamId());
+        Optional<Match> existingMatch = matchRepository.findById(match.getMatchId());
+        if (existingMatch.isPresent()) {
+            // Save will perform an update because the ID already exists in DB
+            matchRepository.save(match);
+        } else {
+            throw new SQLException("Match with ID " + match.getMatchId() + " not found");
         }
-        if (match.getSecondTeamId() == 0) {
-            Team t = match.getSecondTeam();
-            if (t != null)
-                match.setSecondTeamId(t.getTeamId());
-        }
-        if (match.getWinnerTeamId() == 0) {
-            Team t = match.getWinnerTeam();
-            if (t != null)
-                match.setWinnerTeamId(t.getTeamId());
-        }
-        matchRepository.save(match);
     }
 
     @Override
     public void deleteMatch(int matchId) throws SQLException {
-        if (ticketBookingRepository != null) {
-            ticketBookingRepository.deleteByMatchId(matchId);
-        }
         matchRepository.deleteById(matchId);
     }
 
     @Override
-    public List<Match> getAllMatchesByStatus(String status) throws SQLException {
-        List<Match> list = matchRepository.findAllByStatus(status);
-        if (list == null || list.isEmpty()) {
-            throw new NoMatchesFoundException("No matches found for status: " + status);
+    public List<Match> getAllMatchesByStatus(String status) throws NoMatchesFoundException, SQLException {
+        List<Match> matches = matchRepository.findAllByStatus(status);
+        if (matches.isEmpty()) {
+            throw new NoMatchesFoundException("No matches found with status: " + status);
         }
-        return list;
+        return matches;
     }
 }

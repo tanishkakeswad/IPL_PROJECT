@@ -5,6 +5,8 @@ import com.edutech.progressive.service.impl.VoteServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +19,10 @@ public class VoteController {
 
     @GetMapping
     public ResponseEntity<List<Vote>> getAllVotes() {
-        return ResponseEntity.ok(voteService.getAllVotes());
+       List<Vote> votes = voteService.getAllVotes();
+    // Return an empty list [] instead of null to avoid 500 errors
+    return ResponseEntity.ok(votes == null ? new ArrayList<>() : votes);
+       // return ResponseEntity.ok(voteService.getAllVotes());
     }
 
     @PostMapping

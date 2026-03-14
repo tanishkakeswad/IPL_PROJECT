@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface MatchRepository extends JpaRepository<Match, Integer> {
-    Match findByMatchId(int matchId);
+    Match findByMatchId(int matchId);   
 
     List<Match> findAllByStatus(String status);
 

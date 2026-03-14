@@ -80,23 +80,23 @@ public class TeamServiceImplJpa implements TeamService {
     @Transactional
     @Override
     public void deleteTeam(int teamId) throws SQLException {
-        if (ticketBookingRepository != null) {
-            ticketBookingRepository.deleteByTeamId(teamId);
-        }
-        if (matchRepository != null) {
-            matchRepository.deleteByTeamId(teamId);
-        }
-        if (cricketerRepository != null) {
-            cricketerRepository.deleteByTeamId(teamId);
-        }
-        if (voteRepository != null) {
-            voteRepository.deleteByTeamId(teamId);
-        }
-        teamRepository.deleteById(teamId);
+        // if (ticketBookingRepository != null) {
+        //     ticketBookingRepository.deleteByTeamId(teamId);
+        // }
+        // if (matchRepository != null) {
+        //     matchRepository.deleteByTeamId(teamId);
+        // }
+        // if (cricketerRepository != null) {
+        //     cricketerRepository.deleteByTeamId(teamId);
+        // }
+        // if (voteRepository != null) {
+        //     voteRepository.deleteByTeamId(teamId);
+        // }
+        // teamRepository.deleteById(teamId);
         // ticketBookingRepository.deleteByTeamId(teamId);
         // matchRepository.deleteByTeamId(teamId);
         // cricketerRepository.deleteByTeamId(teamId);
         // voteRepository.deleteByTeamId(teamId);
-        // teamRepository.deleteById(teamId);
+        teamRepository.deleteById(teamId);
     }
 }

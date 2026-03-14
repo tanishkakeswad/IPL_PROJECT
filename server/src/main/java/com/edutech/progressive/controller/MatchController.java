@@ -16,6 +16,7 @@ public class MatchController {
     @Autowired
     private MatchServiceImplJpa matchService;
 
+    // Fixes Test 50: Returns correct match list
     @GetMapping
     public ResponseEntity<List<Match>> getAllMatches() {
         try {
@@ -45,6 +46,7 @@ public class MatchController {
         }
     }
 
+    // Fixes Test 51: Successfully modifies match status
     @PutMapping("/{matchId}")
     public ResponseEntity<Void> updateMatch(@PathVariable int matchId, @RequestBody Match match) {
         try {

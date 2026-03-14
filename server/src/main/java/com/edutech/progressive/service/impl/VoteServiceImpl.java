@@ -29,8 +29,25 @@ public class VoteServiceImpl implements VoteService {
 
     @Override
     public int createVote(Vote vote) {
+        if (vote.getTeam() != null) {
+            // Only check the ID if the Team object is NOT null
+            if (vote.getTeam().getTeamId() == null || vote.getTeam().getTeamId() <= 0) {
+                vote.setTeam(null);
+            }
+        }
+
+        // 2. Safe check for Cricketer (This fixes your error)
+        if (vote.getCricketer() != null) {
+            // Only check the ID if the Cricketer object is NOT null
+            if (vote.getCricketer().getCricketerId() == null || vote.getCricketer().getCricketerId() <= 0) {
+                vote.setCricketer(null);
+            }
+        }
+
         Vote saved = voteRepository.save(vote);
         return saved.getVoteId();
+        // Vote saved = voteRepository.save(vote);
+        // return saved.getVoteId();
     }
 
     @Override

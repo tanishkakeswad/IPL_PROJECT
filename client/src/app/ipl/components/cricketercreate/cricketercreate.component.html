@@ -1,0 +1,19 @@
+<div class="form-container">
+  <form [formGroup]="cricketerForm" (ngSubmit)="onSubmit()">
+    <input formControlName="cricketerId" placeholder="Cricketer ID">
+    <input formControlName="teamId" placeholder="Team ID">
+    <input formControlName="cricketerName" placeholder="Cricketer Name">
+    <input type="number" formControlName="age" placeholder="Age">
+    <input formControlName="nationality" placeholder="Nationality">
+    <input formControlName="experience" placeholder="Experience">
+    <input formControlName="role" placeholder="Role">
+    <input type="number" formControlName="totalRuns" placeholder="Total Runs">
+    <input type="number" formControlName="totalWickets" placeholder="Total Wickets">
+
+    <button type="submit">Submit</button>
+    <button type="button" (click)="resetForm()">Reset</button>
+  </form>
+
+  <p *ngIf="successMessage" class="success-msg">{{ successMessage }}</p>
+  <p *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</p>
+</div>

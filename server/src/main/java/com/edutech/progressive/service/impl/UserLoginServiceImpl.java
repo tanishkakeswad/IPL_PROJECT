@@ -3,6 +3,7 @@ package com.edutech.progressive.service.impl;
 import com.edutech.progressive.entity.User;
 import com.edutech.progressive.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,6 +24,9 @@ public class UserLoginServiceImpl implements UserDetailsService {
     @Autowired(required = false)
     private PasswordEncoder passwordEncoder;
 
+    // This will now work perfectly because we added @EnableGlobalMethodSecurity to
+    // config
+    @PreAuthorize("hasRole('ADMIN')")
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -32,7 +36,7 @@ public class UserLoginServiceImpl implements UserDetailsService {
     }
 
     public User createUser(User user) {
-        if (passwordEncoder != null) {
+        if (passwordEncoder != null && user.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         return userRepository.save(user);
@@ -50,15 +54,45 @@ public class UserLoginServiceImpl implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
+    // @Override
+    // public UserDetails loadUserByUsername(String username) throws
+    // UsernameNotFoundException {
+    // User user = userRepository.findByUsername(username);
+    // if (user == null) {
+    // throw new UsernameNotFoundException("User not found with username: " +
+    // username);
+    // }
+
+    // // Fix: Properly map the role with the ROLE_ prefix for Spring Security
+    // String roleWithPrefix = user.getRole().startsWith("ROLE_") ?
+    // user.getRole() : "ROLE_" + user.getRole();
+
+    // return new org.springframework.security.core.userdetails.User(
+    // user.getUsername(),
+    // user.getPassword(),
+    // Collections.singletonList(new SimpleGrantedAuthority(roleWithPrefix))
+    // );
+    // }
+
     @Override
-    public UserDetails loadUserByUsername(String username) {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
-        if (user == null) {
+        if (user == null)
             throw new UsernameNotFoundException("User not found");
-        }
+        // Ensure this logic is present!
+        String role = user.getRole().startsWith("ROLE_") ? user.getRole() : "ROLE_" + user.getRole();
         return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
-                user.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority(user.getRole())));
+                user.getUsername(), user.getPassword(),
+                Collections.singletonList(new SimpleGrantedAuthority(role)));
+
+        // Prefixing is vital for hasRole("ADMIN") to work!
+        // String role = user.getRole().startsWith("ROLE_") ? user.getRole() : "ROLE_" +
+        // user.getRole();
+
+        // return new org.springframework.security.core.userdetails.User(
+        // user.getUsername(),
+        // user.getPassword(),
+        // Collections.singletonList(new SimpleGrantedAuthority(role)));
     }
+
 }

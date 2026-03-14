@@ -1,0 +1,15 @@
+<button (click)="toggleCricketers()">
+  {{ showCricketers ? 'Hide' : 'Show' }} Cricketers
+</button>
+
+<div *ngIf="showCricketers; else noData">
+  <div *ngFor="let c of cricketers" class="card">
+    <h3>{{ c.name }} ({{ c.teamId }})</h3>
+    <p>Age: {{ c.age }} | Role: {{ c.role }}</p>
+    <p>Runs: {{ c.runs }} | Wickets: {{ c.wickets }}</p>
+  </div>
+</div>
+
+<ng-template #noData>
+  <p>No cricketers available to display.</p>
+</ng-template>

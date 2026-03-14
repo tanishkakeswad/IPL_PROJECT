@@ -13,7 +13,7 @@ public class Team implements Comparable<Team> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "team_id")
-    private int teamId;
+    private Integer teamId;
 
     @Column(name = "team_name")
     private String teamName;
@@ -34,7 +34,7 @@ public class Team implements Comparable<Team> {
     public Team() {
     }
 
-    public Team(int teamId, String teamName, String location, String ownerName, int establishmentYear) {
+    public Team(Integer teamId, String teamName, String location, String ownerName, int establishmentYear) {
         this.teamId = teamId;
         this.teamName = teamName;
         this.location = location;
@@ -42,11 +42,11 @@ public class Team implements Comparable<Team> {
         this.establishmentYear = establishmentYear;
     }
 
-    public int getTeamId() {
+    public Integer getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(int teamId) {
+    public void setTeamId(Integer teamId) {
         this.teamId = teamId;
     }
 

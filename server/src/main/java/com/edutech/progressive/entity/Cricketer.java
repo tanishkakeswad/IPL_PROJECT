@@ -11,10 +11,10 @@ public class Cricketer implements Comparable<Cricketer> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cricketer_id")
-    private int cricketerId;
+    private Integer cricketerId;
 
     @Column(name = "team_id")
-    private int teamId;
+    private Integer teamId;
 
     @ManyToOne
     @JoinColumn(name = "team_id", referencedColumnName = "team_id", insertable = false, updatable = false)
@@ -44,7 +44,7 @@ public class Cricketer implements Comparable<Cricketer> {
     public Cricketer() {
     }
 
-    public Cricketer(int cricketerId, int teamId, String cricketerName, int age, String nationality, int experience,
+    public Cricketer(Integer cricketerId, Integer teamId, String cricketerName, int age, String nationality, int experience,
             String role, int totalRuns, int totalWickets) {
         this.cricketerId = cricketerId;
         this.teamId = teamId;
@@ -57,19 +57,19 @@ public class Cricketer implements Comparable<Cricketer> {
         this.totalWickets = totalWickets;
     }
 
-    public int getCricketerId() {
+    public Integer getCricketerId() {
         return cricketerId;
     }
 
-    public void setCricketerId(int cricketerId) {
+    public void setCricketerId(Integer cricketerId) {
         this.cricketerId = cricketerId;
     }
 
-    public int getTeamId() {
+    public Integer getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(int teamId) {
+    public void setTeamId(Integer teamId) {
         this.teamId = teamId;
     }
 
