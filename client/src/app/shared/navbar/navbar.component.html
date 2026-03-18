@@ -1,0 +1,15 @@
+<nav class="navbar">
+  <a class="navbar-brand" routerLink="/ipl/dashboard">IPL</a>
+  
+  <div class="nav-links">
+    <!-- Visible only if role is NOT 'USER' (i.e., it is 'ADMIN') -->
+    <ng-container *ngIf="role !== 'USER'">
+      <a routerLink="/ipl/add-team">Add New Team</a>
+      <a routerLink="/ipl/add-cricketer">Add New Cricketer</a>
+      <a routerLink="/ipl/add-match">Add New Match</a>
+    </ng-container>
+    
+    <!-- Logout component integrated on the right -->
+    <app-logout (click)="logout()"></app-logout>
+  </div>
+</nav>

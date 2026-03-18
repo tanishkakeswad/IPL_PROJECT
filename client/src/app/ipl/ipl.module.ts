@@ -3,15 +3,20 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
-import { TeamCreateComponent } from './components/teamcreate/teamcreate.component'; // Ensure this exists
+import { TeamCreateComponent } from './components/teamcreate/teamcreate.component';
 import { CricketerCreateComponent } from './components/cricketercreate/cricketercreate.component';
 import { MatchCreateComponent } from './components/matchcreate/matchcreate.component';
+// Added for Day 20
+import { VoteComponent } from './components/vote/vote.component';
+import { TicketBookingComponent } from './components/ticketbooking/ticketbooking.component';
 
 @NgModule({
   declarations: [
     TeamCreateComponent,
     CricketerCreateComponent,
-    MatchCreateComponent
+    MatchCreateComponent,
+    VoteComponent,           // Added
+    TicketBookingComponent    // Added
   ],
   imports: [
     CommonModule,
@@ -21,7 +26,9 @@ import { MatchCreateComponent } from './components/matchcreate/matchcreate.compo
   exports: [
     TeamCreateComponent,
     CricketerCreateComponent,
-    MatchCreateComponent
+    MatchCreateComponent,
+    VoteComponent,           // Added
+    TicketBookingComponent    // Added
   ]
 })
 export class IplModule { }

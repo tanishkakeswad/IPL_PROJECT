@@ -19,7 +19,7 @@ export class CricketerCreateComponent implements OnInit {
       cricketerName: new FormControl('', Validators.required),
       age: new FormControl(null, [Validators.required, Validators.min(15)]),
       nationality: new FormControl('', Validators.required),
-      experience: new FormControl(null, Validators.required),
+      experience: new FormControl(null, [Validators.required,Validators.min(0)]),
       role: new FormControl('', Validators.required),
       totalRuns: new FormControl(null, [Validators.required, Validators.min(0)]),
       totalWickets: new FormControl(null, [Validators.required, Validators.min(0)])
