@@ -1,16 +1,20 @@
-<div class="vote-container">
-  <h2>Cast Your Vote</h2>
-  <form [formGroup]="voteForm" (ngSubmit)="onSubmit()">
-    <input type="number" formControlName="voteId" placeholder="Vote ID">
-    <input type="email" formControlName="email" placeholder="Email">
-    <input type="text" formControlName="category" placeholder="Category">
-    <input type="number" formControlName="cricketerId" placeholder="Cricketer ID">
-    <input type="number" formControlName="teamId" placeholder="Team ID">
+<form [formGroup]="voteForm" (ngSubmit)="onSubmit()">
+  <input type="text" formControlName="voteId" placeholder="Vote ID">
+  <input type="email" formControlName="email" placeholder="Email">
+  <input type="text" formControlName="category" placeholder="Category">
 
-    <button type="submit" [disabled]="voteForm.invalid">Submit Vote</button>
-    <button type="button" (click)="resetForm()">Reset</button>
-  </form>
+  <select formControlName="cricketerId">
+    <option value="">Select Cricketer</option>
+    <option *ngFor="let c of cricketers" [value]="c.id">{{c.cricketerName}}</option>
+  </select>
 
-  <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
-  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
-</div>
+  <select formControlName="teamId">
+    <option value="">Select Team</option>
+    <option *ngFor="let t of teams" [value]="t.id">{{t.teamName}}</option>
+  </select>
+  
+  <button type="submit">Vote</button>
+
+  <div *ngIf="successMessage">{{successMessage}}</div>
+  <div *ngIf="errorMessage">{{errorMessage}}</div>
+</form>

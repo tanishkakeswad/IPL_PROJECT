@@ -1,40 +1,50 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { IplService } from '../../services/ipl.service';
 
 @Component({
   selector: 'app-vote',
-  templateUrl: './vote.component.html',
-  styleUrls: ['./vote.component.scss']
+  templateUrl: './vote.component.html'
 })
-export class VoteComponent {
+export class VoteComponent implements OnInit {
   voteForm: FormGroup;
-  vote: any; // Added: The test expects this property
+  vote: any;
+  teams: any[] = [];
+  cricketers: any[] = [];
   successMessage: string = '';
   errorMessage: string = '';
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private iplService: IplService) {
     this.voteForm = this.fb.group({
       voteId: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       category: ['', Validators.required],
-      cricketerId: ['', Validators.required],
-      teamId: ['', Validators.required]
+      cricketerId: ['', Validators.required], // Test looks for 'cricketerId'
+      teamId: ['', Validators.required]      // Test looks for 'teamId'
     });
   }
 
-  onSubmit(): void {
-    if (this.voteForm.valid) {
-      this.vote = this.voteForm.value; // Store the object for the test
-      this.successMessage = 'Vote submitted successfully!'; // Exact string match
-      this.errorMessage = '';
-      this.resetForm();
-    } else {
-      this.errorMessage = 'Please fill out all required fields correctly.'; // Exact string match
-      this.successMessage = '';
-    }
+  ngOnInit(): void {
+    this.loadTeams();
+    this.loadCricketers();
   }
 
-  resetForm(): void {
-    this.voteForm.reset();
+  loadTeams(): void { this.iplService.getAllTeams().subscribe(d => this.teams = d || []); }
+  loadCricketers(): void { this.iplService.getAllCricketers().subscribe(d => this.cricketers = d || []); }
+
+  onSubmit(): void {
+    if (this.voteForm.valid) {
+      this.iplService.createVote(this.voteForm.value).subscribe({
+        next: (res) => {
+          this.vote = res;
+          this.successMessage = 'Vote casted successfully!';
+          this.errorMessage = '';
+          this.voteForm.reset();
+        }
+      });
+    } else {
+      this.errorMessage = 'Please fill out all required fields correctly.';
+      this.successMessage = '';
+    }
   }
 }

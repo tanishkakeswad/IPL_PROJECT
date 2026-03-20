@@ -1,37 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { IplService } from '../../services/ipl.service';
-import { Team } from '../../types/Team';
-import { Cricketer } from '../../types/Cricketer';
-import { Match } from '../../types/Match';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  templateUrl: './dashboard.component.html'
 })
+// src/app/ipl/components/dashboard/dashboard.component.ts
 export class DashboardComponent implements OnInit {
-  teams: Team[] = [];
-  cricketers: Cricketer[] = [];
-  matches: Match[] = [];
+  emailForm: FormGroup;        // MUST be named emailForm
+  ticketsBooked: any[] = [];   // MUST be named ticketsBooked
+  errorMessage: string = '';
 
-  constructor(private iplService: IplService) {}
+  constructor(private fb: FormBuilder, private iplService: IplService) {
+    this.emailForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]]
+    });
+  }
 
-  ngOnInit(): void {
-  this.loadTeams();
-  this.loadCricketers();
-  this.loadMatches();
-}
+  ngOnInit(): void {}
 
-loadTeams(): void {
-  this.iplService.getAllTeams().subscribe(data => this.teams = data || []);
-}
-
-loadCricketers(): void {
-  this.iplService.getAllCricketers().subscribe(data => this.cricketers = data || []);
-}
-
-loadMatches(): void {
-  this.iplService.getAllMatches().subscribe(data => this.matches = data || []);
-}
-
+  onSubmitEmail(): void {     // MUST be named onSubmitEmail
+    if (this.emailForm.valid) {
+      const email = this.emailForm.get('email')?.value;
+      this.iplService.getBookingsByUserEmail(email).subscribe((res) => {
+        this.ticketsBooked = res || [];
+      });
+    }
+  }
 }

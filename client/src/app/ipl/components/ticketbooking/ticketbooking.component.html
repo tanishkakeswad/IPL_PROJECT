@@ -1,5 +1,16 @@
 <form [formGroup]="ticketBookingForm" (ngSubmit)="onSubmit()">
-  <!-- ... inputs ... -->
+  <input type="text" formControlName="bookingId" placeholder="Booking ID">
+  <input type="email" formControlName="email" placeholder="Email">
+  
+  <select formControlName="matchId">
+    <option value="">Select Match</option>
+    <option *ngFor="let m of matches" [value]="m.id">{{m.teams}}</option>
+  </select>
+
+  <input type="number" formControlName="numberOfTickets" placeholder="Tickets">
+
   <button type="submit">Book</button>
-  <button type="button" (click)="resetForm()">Reset</button>
+  
+  <div *ngIf="successMessage">{{successMessage}}</div>
+  <div *ngIf="errorMessage">{{errorMessage}}</div>
 </form>
