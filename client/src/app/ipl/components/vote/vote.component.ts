@@ -7,36 +7,43 @@ import { IplService } from '../../services/ipl.service';
   templateUrl: './vote.component.html'
 })
 export class VoteComponent implements OnInit {
-  voteForm: FormGroup;
-  vote: any;
+  voteForm!: FormGroup;
   teams: any[] = [];
   cricketers: any[] = [];
   successMessage: string = '';
   errorMessage: string = '';
 
   constructor(private fb: FormBuilder, private iplService: IplService) {
-    this.voteForm = this.fb.group({
-      voteId: ['', Validators.required],
+   
+  }
+  loadTeams(){
+    this.iplService.getAllTeams().subscribe(d => this.teams = d || []);
+  }
+  loadCricketers(){
+ this.iplService.getAllCricketers().subscribe(d => this.cricketers = d || []);
+  }
+  ngOnInit(): void {
+     this.voteForm = this.fb.group({
+      // Test uses .setValue() on these exact keys
+      voteId: [null], 
       email: ['', [Validators.required, Validators.email]],
       category: ['', Validators.required],
-      cricketerId: ['', Validators.required], // Test looks for 'cricketerId'
-      teamId: ['', Validators.required]      // Test looks for 'teamId'
+      cricketerId: [null, Validators.required],
+      teamId: [null, Validators.required]
     });
-  }
-
-  ngOnInit(): void {
-    this.loadTeams();
     this.loadCricketers();
+    this.loadTeams();
+   
   }
-
-  loadTeams(): void { this.iplService.getAllTeams().subscribe(d => this.teams = d || []); }
-  loadCricketers(): void { this.iplService.getAllCricketers().subscribe(d => this.cricketers = d || []); }
 
   onSubmit(): void {
     if (this.voteForm.valid) {
+      this.iplService.getAllVotes().subscribe((data)=>{
+        this.voteForm.get('voteId')?.setValue(data.length+1);
+      })
       this.iplService.createVote(this.voteForm.value).subscribe({
-        next: (res) => {
-          this.vote = res;
+        next: () => {
+          
           this.successMessage = 'Vote casted successfully!';
           this.errorMessage = '';
           this.voteForm.reset();
@@ -48,3 +55,4 @@ export class VoteComponent implements OnInit {
     }
   }
 }
+

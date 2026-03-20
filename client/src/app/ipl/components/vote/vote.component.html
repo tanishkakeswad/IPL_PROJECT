@@ -5,16 +5,19 @@
 
   <select formControlName="cricketerId">
     <option value="">Select Cricketer</option>
-    <option *ngFor="let c of cricketers" [value]="c.id">{{c.cricketerName}}</option>
+    <!-- Use c.cricketerId to match the model -->
+    <option *ngFor="let c of cricketers" [value]="c.cricketerId">{{c.cricketerName}}</option>
   </select>
 
   <select formControlName="teamId">
     <option value="">Select Team</option>
-    <option *ngFor="let t of teams" [value]="t.id">{{t.teamName}}</option>
+    <!-- Use t.teamId to match the model -->
+    <option *ngFor="let t of teams" [value]="t.teamId">{{t.teamName}}</option>
   </select>
   
   <button type="submit">Vote</button>
 
-  <div *ngIf="successMessage">{{successMessage}}</div>
-  <div *ngIf="errorMessage">{{errorMessage}}</div>
+  <!-- Ensure these IDs/classes match if the test looks for specific elements -->
+  <div *ngIf="successMessage" class="success-message">{{successMessage}}</div>
+  <div *ngIf="errorMessage" class="error-message">{{errorMessage}}</div>
 </form>

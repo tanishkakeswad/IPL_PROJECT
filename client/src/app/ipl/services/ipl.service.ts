@@ -88,7 +88,7 @@ export class IplService {
     return this.http.get<Team[]>(`${this.baseUrl}/matches/status/${status}`);
   }
 
-  // Backend API calls of Vote
+  
   getAllVotes(): Observable<Vote[]> {
     return this.http.get<Vote[]>(`${this.baseUrl}/votes`);
   }

@@ -7,42 +7,39 @@ import { IplService } from '../../services/ipl.service';
   templateUrl: './ticketbooking.component.html'
 })
 export class TicketBookingComponent implements OnInit {
-  // 1. Rename 'ticketBookingForm' to 'bookingForm' to match the test requirements
-  ticketBookingForm!: FormGroup; 
-  ticketBooking!: any;
+
+  ticketBookingForm!: FormGroup;
+  ticketBooking: any;
   matches: any[] = [];
   successMessage: string = '';
   errorMessage: string = '';
 
-  constructor(private fb: FormBuilder, private iplService: IplService) {
-    // 2. Use 'bookingForm' here as well
-    this.ticketBookingForm = this.fb.group({
-      // matchId and numberOfTickets are correct and match the test expectations
-      bookingId:[null,[Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      matchId: ['', Validators.required],
-      numberOfTickets: ['', [Validators.required, Validators.min(1)]]
-    });
-  }
+  constructor(private fb: FormBuilder, private iplService: IplService) { }
 
   ngOnInit(): void {
+    this.ticketBookingForm = this.fb.group({
+      bookingId:[''],
+      matchId:null,
+      email: ['', [Validators.required, Validators.email]],
+      match: ['', Validators.required],
+      numberOfTickets: ['', [Validators.required, Validators.min(1)]]
+    });
+
     this.loadMatches();
   }
 
   loadMatches(): void {
-    this.iplService.getAllMatches().subscribe(data => this.matches = data || []);
+    this.iplService.getAllMatches().subscribe(data => {
+      this.matches = data || [];
+    });
   }
 
   onSubmit(): void {
-    // 3. Update to use 'this.bookingForm'
     if (this.ticketBookingForm.valid) {
-      this.iplService.createBooking(this.ticketBookingForm.value).subscribe({
-        next: (res) => {
-          this.ticketBooking = res;
-          this.successMessage = 'Ticket booked successfully!';
-          this.errorMessage = '';
-          this.ticketBookingForm.reset();
-        }
+      this.iplService.createBooking(this.ticketBookingForm.value).subscribe(res => {
+        this.ticketBooking = res;
+        this.successMessage = 'Ticket booked successfully!';
+        this.errorMessage = '';
       });
     } else {
       this.errorMessage = 'Please fill out all required fields correctly.';
